@@ -2,30 +2,13 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 const { SpecReporter } = require("jasmine-spec-reporter");
-const puppeteer = require("puppeteer");
-
-process.env.MOZ_HEADLESS = "1"; // options did not work
 
 exports.config = {
   allScriptsTimeout: 11000,
   specs: ["./src/**/*.e2e-spec.ts"],
-  multiCapabilities: [
-    {
-      browserName: "chrome",
-      chromeOptions: {
-        // args: ["--headless", "--disable-gpu", "--window-size=1200,600"],
-        args: ["--headless"], // Puppeteer
-        binary: puppeteer.executablePath(),
-      },
-    },
-    {
-      browserName: "firefox",
-      "moz:firefoxOptions": {
-        args: ["-headless"],
-      },
-    },
-  ],
-  directConnect: true,
+  capabilities: { browserName: "MicrosoftEdge" },
+  seleniumAddress: "http://localhost:17556",
+  directConnect: false,
   baseUrl: "http://localhost:4200/",
   framework: "jasmine",
   jasmineNodeOpts: {
@@ -35,7 +18,7 @@ exports.config = {
   },
   onPrepare() {
     require("ts-node").register({
-      project: require("path").join(__dirname, "./tsconfig.e2e.json"),
+      project: require("path").join(__dirname, "./tsconfig.e2e.ie11.json"),
     });
     jasmine
       .getEnv()

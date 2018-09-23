@@ -4,6 +4,8 @@
 /dist
 /tmp
 /out-tsc
+/src/assets/evergreen-webworkers
+/src/assets/ie11-webworkers
 
 # dependencies
 /node_modules

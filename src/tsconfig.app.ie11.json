@@ -1,7 +1,8 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/app",
+    "target": "es5",
+    "outDir": "../out-tsc/app-ie11",
     "types": []
   },
   "exclude": ["test.ts", "**/*.spec.ts", "**/*.worker.ts"]

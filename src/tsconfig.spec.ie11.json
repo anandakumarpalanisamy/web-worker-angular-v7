@@ -1,9 +1,10 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/spec",
+    "target": "es5",
+    "outDir": "../out-tsc/spec-ie11",
     "types": ["jasmine", "node"]
   },
-  "files": ["test.ts", "polyfills.ts"],
+  "files": ["test.ts", "polyfills.ie11.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }
