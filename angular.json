@@ -24,6 +24,11 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
+            "scripts": [
+              "node_modules/vega/build/vega.js",
+              "node_modules/vega-lite/build/vega-lite.js",
+              "node_modules/vega-embed/build/vega-embed.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -55,6 +60,11 @@
             "tsConfig": "src/tsconfig.app.ie11.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
+            "scripts": [
+              "node_modules/vega/build/vega.js",
+              "node_modules/vega-lite/build/vega-lite.js",
+              "node_modules/vega-embed/build/vega-embed.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -148,6 +158,11 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": ["src/styles.scss"],
+            "scripts": [
+              "node_modules/vega/build/vega.js",
+              "node_modules/vega-lite/build/vega-lite.js",
+              "node_modules/vega-embed/build/vega-embed.js"
+            ],
             "assets": ["src/favicon.ico", "src/assets"]
           }
         },
@@ -159,6 +174,11 @@
             "tsConfig": "src/tsconfig.spec.ie11.json",
             "karmaConfig": "src/karma.conf.ie11.js",
             "styles": ["src/styles.scss"],
+            "scripts": [
+              "node_modules/vega/build/vega.js",
+              "node_modules/vega-lite/build/vega-lite.js",
+              "node_modules/vega-embed/build/vega-embed.js"
+            ],
             "assets": ["src/favicon.ico", "src/assets"]
           }
         },
