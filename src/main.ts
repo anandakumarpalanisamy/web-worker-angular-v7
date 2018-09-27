@@ -37,6 +37,6 @@ const foo = async function*() {
 
 const o = { a: 42 };
 const p = { ...o, b: 666 };
-console.log("object destructuring", JSON.stringify(p));
+console.log("test object destructuring", JSON.stringify(p));
 
 console.log("window BroadcastChannel", typeof BroadcastChannel);

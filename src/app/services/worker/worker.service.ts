@@ -16,12 +16,14 @@ interface IWorkerObj {
 })
 export class WorkerService {
   private readonly workers: Map<any, IWorkerObj> = new Map();
-  private readonly path = "/assets/webworkers/main.worker.js";
+  private workerDir({ workerName }) {
+    return `/assets/webworkers/${workerName}.worker.js`;
+  }
 
-  async ping() {
-    console.log("WorkerService", this.path, this.workers);
+  async ping(workerName: string) {
+    console.log("WorkerService", workerName, this.workerDir, this.workers);
 
-    const worker = new Worker(this.path);
+    const worker = new Worker(this.workerDir({ workerName }));
 
     worker.onmessage = event => {
       console.log(`got message from worker: ${event.data}`);
@@ -32,41 +34,41 @@ export class WorkerService {
     return "pong";
   }
 
-  // workerInit(reference: any): IWorkerHandle {
-  //   const worker = new Worker(this.path);
+  workerInit(reference: any, workerName: string): IWorkerHandle {
+    const worker = new Worker(this.workerDir({ workerName }));
 
-  //   const output = new ReplaySubject(1);
-  //   worker.onmessage = (event: MessageEvent) => {
-  //     output.next(event);
-  //   };
-  //   worker.onerror = (error: any) => {
-  //     output.error(error);
-  //   };
-  //   const outputHandle = output.subscribe();
+    const output = new ReplaySubject(1);
+    worker.onmessage = (event: MessageEvent) => {
+      output.next(event);
+    };
+    worker.onerror = (error: any) => {
+      output.error(error);
+    };
+    const outputHandle = output.subscribe();
 
-  //   const input = (data: any) => {
-  //     worker.postMessage(data);
-  //   };
+    const input = (data: any) => {
+      worker.postMessage(data);
+    };
 
-  //   this.workers.set(reference, {
-  //     worker,
-  //     output: outputHandle,
-  //   });
+    this.workers.set(reference, {
+      worker,
+      output: outputHandle,
+    });
 
-  //   return {
-  //     input,
-  //     get output() {
-  //       return output.asObservable();
-  //     },
-  //   };
-  // }
+    return {
+      input,
+      get output() {
+        return output.asObservable();
+      },
+    };
+  }
 
-  // terminate(reference: Object): void {
-  //   console.assert(this.workers.has(reference));
+  terminate(reference: Object): void {
+    console.assert(this.workers.has(reference));
 
-  //   const { worker, output } = this.workers.get(reference);
-  //   this.workers.delete(reference);
-  //   worker.terminate();
-  //   output.unsubscribe();
-  // }
+    const { worker, output } = this.workers.get(reference);
+    this.workers.delete(reference);
+    worker.terminate();
+    output.unsubscribe();
+  }
 }

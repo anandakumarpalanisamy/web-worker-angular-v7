@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/worker",
+    "target": "es2015",
+    "lib": ["es2018", "esnext.asynciterable", "webworker"]
+  },
+  "exclude": ["test.ts", "**/*.spec.ts"],
+  "include": ["**/*.worker.ts", "polyfills.ts"]
+}

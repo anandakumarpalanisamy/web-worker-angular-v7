@@ -8,11 +8,11 @@ For these two browsers a separate bundle is created and served.
 
 ## Web Workers
 
-Angular-CLI serve does not seem to work with custom Webpack configs completely, so these features were not working yet: Serve and configurations with file replacement.
-
-As a workaround, a Nodemon script is used instead for automatic recompliation. In the build the Typescript compiler includes `src/main.ts` and fails when there is no DOM configured in the TS configuration for workers. Therefore, the TS config includes the DOM for Web Worker files.
+There is no real benefit from using Angular-CLI for the build of worker files. As a workaround, a Nodemon script is used instead for automatic recompliation.
 
 > Note: You have to build the Web Workers before the app, since the files are copied during the app build.
+
+> Note: Each worker file must be added to `src/web-worker.webpack.base.config.js`.
 
 ## Development server
 
@@ -36,11 +36,15 @@ Run `npm run build` to build the project. The build artifacts will be stored in 
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github.io). Headless instances of Chrome and Firefox and normal Instances of IE11 and Edge will be launched.
+
+> Note: IE11 does not pickup changes in files, unless you open its developer tools (F12).
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+> Note: You must start the Web Drivers for IE11 and Edge manually before starting the E2E tests (see below).
 
 ### Headless Mode
 

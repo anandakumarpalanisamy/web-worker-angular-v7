@@ -9,24 +9,35 @@ import { WorkerService } from "./services/worker/worker.service";
 export class AppComponent implements OnInit {
   title = "web-worker-v7";
 
+  // TS does not parse async generators as class method correctly
+  foo = async function*() {
+    let i = 0;
+    do {
+      await new Promise((resolve, reject) => setTimeout(resolve, 1000));
+      yield i;
+      i += 1;
+    } while (i < 3);
+  };
+
   constructor(private workerService: WorkerService) {}
 
   async ngOnInit() {
-    console.log("ngOnInit this.service", await this.workerService.ping());
+    const reference = Object.create(null);
+    await this.testWorker(reference, "main");
+    await this.testWorker(reference, "another");
+  }
 
-    // const ref = Object.create(null);
-    // const { input, output } = this.workerService.workerInit(ref);
-    // output.subscribe((event: MessageEvent) => {
-    //   console.log("Got output:", JSON.stringify(event.data));
-    // });
-    // input(null);
-    // input(1);
-    // input(2);
-    // input(42);
-
-    // for await (const x of foo()) {
-    //   console.log("Worker Ping!", x);
-    //   input(x);
-    // }
+  private async testWorker(reference: any, workerName: string) {
+    const { input, output } = this.workerService.workerInit(
+      reference,
+      workerName,
+    );
+    output.subscribe((event: MessageEvent) => {
+      console.log("Got output:", JSON.stringify(event.data));
+    });
+    for await (const x of this.foo()) {
+      input(x);
+    }
+    this.workerService.terminate(reference);
   }
 }
