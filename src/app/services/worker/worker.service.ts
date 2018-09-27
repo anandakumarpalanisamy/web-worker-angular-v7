@@ -20,20 +20,6 @@ export class WorkerService {
     return `/assets/webworkers/${workerName}.worker.js`;
   }
 
-  async ping(workerName: string) {
-    console.log("WorkerService", workerName, this.workerDir, this.workers);
-
-    const worker = new Worker(this.workerDir({ workerName }));
-
-    worker.onmessage = event => {
-      console.log(`got message from worker: ${event.data}`);
-      worker.terminate();
-    };
-    worker.postMessage(42);
-
-    return "pong";
-  }
-
   workerInit(reference: any, workerName: string): IWorkerHandle {
     const worker = new Worker(this.workerDir({ workerName }));
 

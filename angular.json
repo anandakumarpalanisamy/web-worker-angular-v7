@@ -94,8 +94,7 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "web-worker-v7:build:production",
-              "proxyConfig": "proxy.config.evergreen.json"
+              "browserTarget": "web-worker-v7:build:production"
             }
           }
         },
@@ -108,9 +107,7 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "web-worker-v7:build-ie11:production",
-              "proxyConfig": "proxy.config.ie11.json",
-              "port": 4300
+              "browserTarget": "web-worker-v7:build-ie11:production"
             }
           }
         },
@@ -123,9 +120,7 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "web-worker-v7:build-ie11:production",
-              "proxyConfig": "proxy.config.e2e.ie11.json",
-              "port": 4200
+              "browserTarget": "web-worker-v7:build-ie11:production"
             }
           }
         },
@@ -138,9 +133,7 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "web-worker-v7:build-ie11:production",
-              "proxyConfig": "proxy.config.e2e.edge.json",
-              "port": 4300
+              "browserTarget": "web-worker-v7:build-ie11:production"
             }
           }
         },

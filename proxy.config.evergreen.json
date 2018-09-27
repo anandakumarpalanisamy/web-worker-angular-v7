@@ -1,9 +1,8 @@
 {
-  "logLevel": "debug",
-  "/assets/webworkers/*": {
+  "/assets/webworkers/": {
     "target": "http://localhost:4200",
     "pathRewrite": {
-      "^/assets/webworkers": "/assets/evergreen-webworkers"
+      "^/assets/webworkers/": "/assets/evergreen-webworkers/"
     }
   }
 }
