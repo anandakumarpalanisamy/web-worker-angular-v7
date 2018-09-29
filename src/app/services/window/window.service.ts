@@ -1,15 +1,15 @@
-import { Injectable, Optional, PLATFORM_ID, Inject } from "@angular/core";
-import { isPlatformBrowser } from "@angular/common";
+import { Injectable, Optional } from "@angular/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class WindowService {
-  constructor(
-    @Optional() _window: Window,
-    @Inject(PLATFORM_ID) platformId: Object,
-  ) {
-    if (_window === null && isPlatformBrowser(platformId)) {
+  // constructor() {
+  //   this.window = window;
+  // }
+
+  constructor(@Optional() _window: Window) {
+    if (_window === null) {
       this.window = window;
     }
   }
