@@ -8,7 +8,7 @@
     "test": "run-p \"npm-watch _build:webworkers:dev\" \"ng run web-worker-v7:test -- --code-coverage\" \"ng run web-worker-v7:test-ie11\"",
     "lint": "ng lint",
     "e2e": "run-s _build:webworkers:dev \"ng e2e web-worker-v7-e2e\" \"ng e2e web-worker-v7-e2e-ie11\" \"ng e2e web-worker-v7-e2e-edge\"",
-    "format": "prettier ./{src,e2e}/**/*.{ts,js,json,scss} ./*.{js,json,md} --write",
+    "format": "prettier ./{src,e2e}/**/*.{ts,js,json,scss} ./*.{js,json,md} !./src/assets/*-webworkers/**/* --write",
     "clean": "rimraf ./coverage ./dist ./src/assets/evergreen-webworkers ./src/assets/ie11-webworkers",
     "_build:webworkers:dev": "run-s \"webpack -- --config ./src/web-worker.webpack.dev.config.js\" \"webpack -- --config ./src/web-worker.webpack.dev.ie11.config.js\"",
     "ng": "ng",
