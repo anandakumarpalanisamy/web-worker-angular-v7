@@ -28,5 +28,7 @@ module.exports = function(config) {
     autoWatch: true,
     browsers: ["IE", "Edge"],
     singleRun: false,
+    captureTimeout: 90000, // IE fails
+    browserDisconnectTimeout: 3000, // Edge fails
   });
 };
