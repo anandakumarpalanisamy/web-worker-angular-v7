@@ -6,10 +6,14 @@ import { isPlatformBrowser } from "@angular/common";
 })
 export class WindowService {
   constructor(
-    @Optional() _window: Window,
     @Inject(PLATFORM_ID) platformId: Object,
+    @Optional()
+    @Inject(Window)
+    _window: Window,
   ) {
-    if (_window === null && isPlatformBrowser(platformId)) {
+    if (_window !== null) {
+      this.window = _window;
+    } else if (isPlatformBrowser(platformId)) {
       this.window = window;
     }
   }
