@@ -18,7 +18,7 @@ There is no real benefit from using Angular-CLI for the build of worker files. A
 
 Run `npm start` for a dev server and a Web Worker watcher. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-> Note: The IE11/Edge version is served under `http://localhost:4300/`.
+> Note: The IE11/Edge version is served under `http://localhost:4201/`.
 
 > Node: The IE11/Edge version proxies requests to webworkers, so that both evergreen and IE11/Edge can be served at the same time.
 

@@ -101,11 +101,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "web-worker-v7:build-ie11",
-            "port": 4300
+            "port": 4201
           },
           "configurations": {
             "production": {
-              "browserTarget": "web-worker-v7:build-ie11:production"
+              "browserTarget": "web-worker-v7:build-ie11:production",
+              "port": 4201
             }
           }
         },
