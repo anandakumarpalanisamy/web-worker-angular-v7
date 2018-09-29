@@ -113,8 +113,7 @@
         "serve-e2e-ie11": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "web-worker-v7:build-ie11",
-            "port": 4200
+            "browserTarget": "web-worker-v7:build-ie11"
           },
           "configurations": {
             "production": {
@@ -125,8 +124,7 @@
         "serve-e2e-edge": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "web-worker-v7:build-ie11",
-            "port": 4300
+            "browserTarget": "web-worker-v7:build-ie11"
           },
           "configurations": {
             "production": {
