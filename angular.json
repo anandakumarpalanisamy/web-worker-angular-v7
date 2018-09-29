@@ -170,6 +170,22 @@
             "assets": ["src/favicon.ico", "src/assets"]
           }
         },
+        "test-edge": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ie11.ts",
+            "tsConfig": "src/tsconfig.spec.ie11.json",
+            "karmaConfig": "src/karma.conf.edge.js",
+            "styles": ["src/styles.scss"],
+            "scripts": [
+              "node_modules/vega/build/vega.js",
+              "node_modules/vega-lite/build/vega-lite.js",
+              "node_modules/vega-embed/build/vega-embed.js"
+            ],
+            "assets": ["src/favicon.ico", "src/assets"]
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
