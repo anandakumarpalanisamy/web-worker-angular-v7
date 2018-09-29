@@ -34,8 +34,5 @@ module.exports = function(config) {
     },
     browsers: ["ChromeHeadless", "FirefoxHeadless"],
     singleRun: false,
-    proxies: {
-      "/assets/webworkers/": "/assets/evergreen-webworkers/",
-    },
   });
 };

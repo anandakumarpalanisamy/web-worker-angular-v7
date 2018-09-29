@@ -1,9 +1,0 @@
-{
-  "logLevel": "debug",
-  "/assets/webworkers/*": {
-    "target": "http://localhost:5555",
-    "pathRewrite": {
-      "^/assets/webworkers/": "/assets/ie11-webworkers/"
-    }
-  }
-}

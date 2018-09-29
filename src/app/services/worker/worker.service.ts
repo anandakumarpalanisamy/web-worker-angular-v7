@@ -1,5 +1,6 @@
-import { Injectable, Optional } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Observable, Subscription, ReplaySubject } from "rxjs";
+import { PlatformCheckService } from "../platform-check/platform-check.service";
 
 export interface IWorkerHandle {
   input: (data: any) => void;
@@ -15,13 +16,17 @@ interface IWorkerObj {
   providedIn: "root",
 })
 export class WorkerService {
-  private readonly workers: Map<any, IWorkerObj> = new Map();
-  private workerDir({ workerName }) {
-    return `/assets/webworkers/${workerName}.worker.js`;
+  constructor(platformCheckService: PlatformCheckService) {
+    const isEvergreen = platformCheckService.isEvergreen;
+    this.workerDir = `/assets/${isEvergreen ? "evergreen" : "ie11"}-webworkers`;
   }
 
+  private workers: Map<any, IWorkerObj> = new Map();
+  private readonly workerDir: string;
+
   workerInit(reference: any, workerName: string): IWorkerHandle {
-    const worker = new Worker(this.workerDir({ workerName }));
+    const workerUri = `${this.workerDir}/${workerName}.worker.js`;
+    const worker = new Worker(workerUri);
 
     const output = new ReplaySubject(1);
     worker.onmessage = (event: MessageEvent) => {

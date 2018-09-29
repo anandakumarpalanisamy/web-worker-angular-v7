@@ -2,38 +2,13 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
+import { WindowService } from "./services/window/window.service";
+import { PlatformCheckService } from "./services/platform-check/platform-check.service";
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule],
-  providers: [],
+  providers: [WindowService, PlatformCheckService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-
-// import { BrowserModule } from "@angular/platform-browser";
-// import { NgModule } from "@angular/core";
-// // import {
-// //   WorkerAppModule,
-// //   WORKER_APP_LOCATION_PROVIDERS,
-// // } from "@angular/platform-webworker";
-// // import { APP_BASE_HREF } from "@angular/common";
-
-// import { AppComponent } from "./app.component";
-
-// @NgModule({
-//   declarations: [AppComponent],
-//   imports: [
-//     BrowserModule,
-//     // WorkerAppModule,
-//   ],
-//   providers: [
-//     // {
-//     //   provide: APP_BASE_HREF,
-//     //   useValue: "/",
-//     // },
-//     // WORKER_APP_LOCATION_PROVIDERS,
-//   ],
-//   bootstrap: [AppComponent],
-// })
-// export class AppModule {}

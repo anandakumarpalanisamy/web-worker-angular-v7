@@ -28,8 +28,5 @@ module.exports = function(config) {
     autoWatch: true,
     browsers: ["IE", "Edge"],
     singleRun: false,
-    proxies: {
-      "/assets/webworkers/": "/assets/ie11-webworkers/",
-    },
   });
 };

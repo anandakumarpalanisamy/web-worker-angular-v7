@@ -89,8 +89,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "web-worker-v7:build",
-            "proxyConfig": "proxy.config.evergreen.json"
+            "browserTarget": "web-worker-v7:build"
           },
           "configurations": {
             "production": {
@@ -102,7 +101,6 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "web-worker-v7:build-ie11",
-            "proxyConfig": "proxy.config.ie11.json",
             "port": 4300
           },
           "configurations": {
@@ -115,7 +113,6 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "web-worker-v7:build-ie11",
-            "proxyConfig": "proxy.config.e2e.ie11.json",
             "port": 4200
           },
           "configurations": {
@@ -128,7 +125,6 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "web-worker-v7:build-ie11",
-            "proxyConfig": "proxy.config.e2e.edge.json",
             "port": 4300
           },
           "configurations": {

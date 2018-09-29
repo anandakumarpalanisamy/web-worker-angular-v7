@@ -1,8 +1,0 @@
-{
-  "/assets/webworkers/": {
-    "target": "http://localhost:4200",
-    "pathRewrite": {
-      "^/assets/webworkers/": "/assets/evergreen-webworkers/"
-    }
-  }
-}
