@@ -42,47 +42,105 @@ export const AsyncGenThingy = () => {
 
 export const DraggableArea = () => {
   const asyncGenThingy = AsyncGenThingy();
-  const main = async function*(source) {
-    for await (const i of source) {
-      if (i.type === "pointerdown") {
-        let dragDistance = false;
-        console.log("drag start?");
-        const element = i.target.closest(".draggable");
-        if (element) {
-          const parentBox = element
-            .closest(".draggable-area")
-            .getBoundingClientRect();
-          const childBox = element.getBoundingClientRect();
-          for await (const j of source) {
-            if (j.type === "pointerup") {
-              if (dragDistance) {
-                console.log("drag stop");
-                dragDistance = false;
-              }
-              break;
-            }
-            if (j.type === "pointermove") {
-              const delta_x = j.x - i.x;
-              const delta_y = j.y - i.y;
-              const new_x = Math.min(
-                parentBox.width - childBox.width,
-                Math.max(0, childBox.left - parentBox.left + delta_x),
-              );
-              const new_y = Math.min(
-                parentBox.height - childBox.height,
-                Math.max(0, childBox.top - parentBox.top + delta_y),
-              );
-              element.style.left = `${new_x}px`;
-              element.style.top = `${new_y}px`;
-              dragDistance = true;
-            }
-            yield j;
+  const makeDragMessages = async function*(input) {
+    const source = asyncGenThingy.share(input);
+    for await (const clicked of source) {
+      if (clicked.type !== "pointerdown") {
+        continue;
+      }
+      const element = clicked.target.closest(".draggable");
+      if (!element) {
+        continue;
+      }
+      clicked.preventDefault();
+      const parentBox = element
+        .closest(".draggable-area")
+        .getBoundingClientRect();
+      const start_element_box = element.getBoundingClientRect();
+      let dragDistance = false;
+      for await (const dragged of source) {
+        if (dragged.type !== "pointerup" && dragged.type !== "pointermove") {
+          continue;
+        }
+        dragged.preventDefault();
+        if (dragged.type === "pointerup") {
+          if (dragDistance) {
+            yield {
+              type: "drop",
+            };
+            dragDistance = false;
           }
+          break;
+        }
+        if (dragged.type === "pointermove") {
+          yield {
+            type: "dragstart",
+            element,
+          };
+          dragDistance = true;
+          const delta_x = dragged.x - clicked.x;
+          const delta_y = dragged.y - clicked.y;
+          const new_x = Math.min(
+            parentBox.width - start_element_box.width,
+            Math.max(0, start_element_box.left - parentBox.left + delta_x),
+          );
+          const new_y = Math.min(
+            parentBox.height - start_element_box.height,
+            Math.max(0, start_element_box.top - parentBox.top + delta_y),
+          );
+          yield {
+            type: "dragging",
+            new_x,
+            new_y,
+          };
         }
       }
-      yield i;
     }
   };
+  const setPosition = async function*(input) {
+    const area = document.querySelector(".draggable-area");
+    const source = asyncGenThingy.share(input);
+    for await (const dragStarted of source) {
+      console.assert(dragStarted.type === "dragstart");
+      const { element } = dragStarted;
+      console.log("dragstart", element.innerHTML);
+      area.classList.add("draggable-area--dragging");
+      element.classList.add("draggable--dragging");
+      for await (const dragged of source) {
+        if (dragged.type === "dragging") {
+          const { new_x, new_y } = dragged;
+          element.style.left = `${new_x}px`;
+          element.style.top = `${new_y}px`;
+        }
+        if (dragged.type === "drop") {
+          console.log("drop", element.innerHTML);
+          area.classList.remove("draggable-area--dragging");
+          element.classList.remove("draggable--dragging");
+          break;
+        }
+      }
+    }
+  };
+  const throttleMove = async function*(input) {
+    const source = asyncGenThingy.share(input);
+    let last = new Date().valueOf();
+    for await (const i of source) {
+      if (i.type !== "pointermove") {
+        yield i;
+      } else if (new Date().valueOf() - last > 32) {
+        last = new Date().valueOf();
+        yield i;
+      }
+    }
+  };
+  function main(i) {
+    // i = throttleMove(i);
+    // converts pointer events on `dragstart`, `dragging` and `drop`
+    i = makeDragMessages(i);
+    // updates current element absolute position
+    i = setPosition(i);
+    return i;
+  }
   return Object.assign(Object.create(null), {
     send: asyncGenThingy.send,
     start() {

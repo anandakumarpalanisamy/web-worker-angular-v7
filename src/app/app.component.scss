@@ -7,17 +7,21 @@
   width: 400px;
   height: 300px;
   margin: 100px;
-  background-color: bisque;
+  background-color: beige;
+  box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+
+  &--dragging {
+    background-color: bisque;
+  }
 }
 
 .draggable {
   position: absolute;
   cursor: pointer;
-  box-shadow: 0px 1px 3px 0;
   width: 80px;
   height: 80px;
-  background: white;
-  color: #5af;
+  background: #5af;
+  color: white;
   font-size: 21px;
   text-align: center;
   overflow: hidden;
@@ -25,6 +29,12 @@
   justify-content: center;
   align-items: center;
   user-select: none;
+
+  &--dragging {
+    opacity: 0.5;
+    z-index: 10;
+    outline: 1px solid grey;
+  }
 }
 
 .draggable:nth-child(odd) {
