@@ -15,6 +15,9 @@ export class WindowService {
       this.window = _window;
     } else if (isPlatformBrowser(platformId)) {
       this.window = window;
+    } else {
+      const navigator = Object.assign(Object.create(null), { appVersion: "" });
+      this.window = Object.assign(Object.create(null), { navigator });
     }
   }
 
