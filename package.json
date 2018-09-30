@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "run-p \"npm-watch _build:webworkers:dev\" \"ng run web-worker-v7:serve\" \"ng run web-worker-v7:serve-ie11\"",
-    "build": "run-s \"webpack -- --config ./src/web-worker.webpack.production.config.js\" \"webpack -- --config ./src/web-worker.webpack.production.ie11.config.js\" \"ng run web-worker-v7:build:production\" \"ng run web-worker-v7:build-ie11:production\"",
+    "build": "run-s \"webpack -- --config ./src/web-worker.webpack.production.config.js\" \"webpack -- --config ./src/web-worker.webpack.production.ie11.config.js\" \"ng run web-worker-v7:build:production -- --stats-json\" \"ng run web-worker-v7:build-ie11:production -- --stats-json\"",
     "build:dev": "run-s _build:webworkers:dev \"ng run web-worker-v7:build\" \"ng run web-worker-v7:build-ie11\"",
     "test:once": "run-s _build:webworkers:dev \"ng run web-worker-v7:test -- --code-coverage --watch=false\" \"ng run web-worker-v7:test-ie11 -- --watch=false\" \"ng run web-worker-v7:test-edge -- --watch=false\"",
     "test:edge": "run-p \"npm-watch _build:webworkers:dev\" \"ng run web-worker-v7:test-edge\"",
@@ -13,9 +13,11 @@
     "format": "prettier ./{src,e2e}/**/*.{ts,js,json,scss} ./*.{js,json,md} !./src/assets/*-webworkers/**/* --write",
     "clean": "rimraf ./coverage ./dist ./src/assets/evergreen-webworkers ./src/assets/ie11-webworkers",
     "_build:webworkers:dev": "run-s \"webpack -- --config ./src/web-worker.webpack.dev.config.js\" \"webpack -- --config ./src/web-worker.webpack.dev.ie11.config.js\"",
+    "bundle-report": "run-p \"webpack-bundle-analyzer dist/web-worker-v7/stats.json\" \"webpack-bundle-analyzer dist/web-worker-v7-ie11/stats.json -- --port 8889\"",
     "ng": "ng",
     "npm-watch": "npm-watch",
-    "webpack": "webpack"
+    "webpack": "webpack",
+    "webpack-bundle-analyzer": "webpack-bundle-analyzer"
   },
   "watch": {
     "_build:webworkers:dev": {
@@ -80,6 +82,7 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "^3.1.1",
+    "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.1.2"
   }
 }
