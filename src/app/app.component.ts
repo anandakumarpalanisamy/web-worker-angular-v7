@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
   }
 
   private test() {
-    const foo = new Foo();
-    foo.start();
+    const draggableTest = DraggableTest();
+    draggableTest.start();
   }
 
   private async vegaInit() {
@@ -100,12 +100,11 @@ export class AppComponent implements OnInit {
   };
 }
 
-abstract class AsyncGenThingy {
-  private callback: () => void;
-  private queue = IterableQueue();
-  protected abstract main;
-
-  private share(iterable) {
+const AsyncGenThingy = () => {
+  // https://medium.com/dailyjs/decoupling-business-logic-using-async-generators-cc257f80ab33
+  let callback;
+  const queue = IterableQueue();
+  const share = iterable => {
     const iterator = iterable[Symbol.asyncIterator]();
     return Object.assign(Object.create(null), {
       next: () => iterator.next(),
@@ -113,57 +112,37 @@ abstract class AsyncGenThingy {
         return this;
       },
     });
-  }
-
-  protected send(event) {
-    if (!this.queue.length() && this.callback) {
-      this.callback();
+  };
+  const send = event => {
+    if (!queue.length() && callback) {
+      callback();
     }
-    this.queue.add(event);
-  }
-
-  protected readonly produce = async function*() {
+    queue.add(event);
+  };
+  const produce = async function*() {
     for (;;) {
-      while (this.queue.length()) {
-        const value = this.queue.remove();
+      while (queue.length()) {
+        const value = queue.remove();
         yield value;
       }
-      await new Promise(i => (this.callback = i));
+      await new Promise(i => (callback = i));
     }
   };
-
-  protected async consume(input) {
+  const consume = async input => {
     for await (const i of input) {
     }
-  }
-}
+  };
+  return Object.assign(Object.create(null), {
+    share,
+    send,
+    produce,
+    consume,
+  });
+};
 
-class Foo extends AsyncGenThingy {
-  constructor() {
-    super();
-  }
-
-  public start() {
-    document.addEventListener(
-      "pointermove",
-      (...args) => this.send(...args),
-      false,
-    );
-    document.addEventListener(
-      "pointerdown",
-      (...args) => this.send(...args),
-      false,
-    );
-    document.addEventListener(
-      "pointerup",
-      (...args) => this.send(...args),
-      false,
-    );
-    this.consume(this.main(this.produce()));
-  }
-
-  protected readonly main = async function*(input) {
-    const source = this.share(input);
+const DraggableTest = () => {
+  const asyncGenThingy = AsyncGenThingy();
+  const main = async function*(source) {
     let dragDistance = false;
     for await (const i of source) {
       if (i.type === "pointerdown") {
@@ -204,4 +183,25 @@ class Foo extends AsyncGenThingy {
       yield i;
     }
   };
-}
+  return Object.assign(Object.create(null), {
+    start() {
+      document.addEventListener(
+        "pointermove",
+        (...args) => asyncGenThingy.send(...args),
+        false,
+      );
+      document.addEventListener(
+        "pointerdown",
+        (...args) => asyncGenThingy.send(...args),
+        false,
+      );
+      document.addEventListener(
+        "pointerup",
+        (...args) => asyncGenThingy.send(...args),
+        false,
+      );
+      const source = asyncGenThingy.share(asyncGenThingy.produce());
+      asyncGenThingy.consume(main(source));
+    },
+  });
+};
