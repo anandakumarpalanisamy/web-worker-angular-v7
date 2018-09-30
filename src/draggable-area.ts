@@ -43,9 +43,9 @@ export const AsyncGenThingy = () => {
 export const DraggableArea = () => {
   const asyncGenThingy = AsyncGenThingy();
   const main = async function*(source) {
-    let dragDistance = false;
     for await (const i of source) {
       if (i.type === "pointerdown") {
+        let dragDistance = false;
         console.log("drag start?");
         const element = i.target.closest(".draggable");
         if (element) {
@@ -87,7 +87,8 @@ export const DraggableArea = () => {
     send: asyncGenThingy.send,
     start() {
       const source = asyncGenThingy.share(asyncGenThingy.produce());
-      asyncGenThingy.consume(main(source));
+      const processed = main(source);
+      asyncGenThingy.consume(processed);
     },
   });
 };
