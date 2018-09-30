@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { View, Spec } from "vega";
 import { WorkerService } from "./services/worker/worker.service";
-import { IterableQueue } from "../iterable-queue";
+import { DraggableArea } from "../draggable-area";
 
 declare var vega: any;
 declare var vegaEmbed: (containerId: string, spec: any) => void;
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   constructor(private workerService: WorkerService) {}
 
   async ngOnInit() {
-    this.test();
+    this.draggableTest();
 
     this.vegaInit();
     this.vegaLiteInit();
@@ -29,9 +29,12 @@ export class AppComponent implements OnInit {
     this.testWorker(Object.create(null), "another");
   }
 
-  private test() {
-    const draggableTest = DraggableTest();
-    draggableTest.start();
+  private draggableTest() {
+    const area = DraggableArea();
+    document.addEventListener("pointermove", area.send, false);
+    document.addEventListener("pointerdown", area.send, false);
+    document.addEventListener("pointerup", area.send, false);
+    area.start();
   }
 
   private async vegaInit() {
@@ -99,109 +102,3 @@ export class AppComponent implements OnInit {
     } while (i < 3);
   };
 }
-
-const AsyncGenThingy = () => {
-  // https://medium.com/dailyjs/decoupling-business-logic-using-async-generators-cc257f80ab33
-  let callback;
-  const queue = IterableQueue();
-  const share = iterable => {
-    const iterator = iterable[Symbol.asyncIterator]();
-    return Object.assign(Object.create(null), {
-      next: () => iterator.next(),
-      [Symbol.asyncIterator]() {
-        return this;
-      },
-    });
-  };
-  const send = event => {
-    if (!queue.length() && callback) {
-      callback();
-    }
-    queue.add(event);
-  };
-  const produce = async function*() {
-    for (;;) {
-      while (queue.length()) {
-        const value = queue.remove();
-        yield value;
-      }
-      await new Promise(i => (callback = i));
-    }
-  };
-  const consume = async input => {
-    for await (const i of input) {
-    }
-  };
-  return Object.assign(Object.create(null), {
-    share,
-    send,
-    produce,
-    consume,
-  });
-};
-
-const DraggableTest = () => {
-  const asyncGenThingy = AsyncGenThingy();
-  const main = async function*(source) {
-    let dragDistance = false;
-    for await (const i of source) {
-      if (i.type === "pointerdown") {
-        console.log("drag start?");
-        const element = i.target.closest(".draggable");
-        if (element) {
-          const parentBox = element
-            .closest(".draggable-area")
-            .getBoundingClientRect();
-          const childBox = element.getBoundingClientRect();
-          for await (const j of source) {
-            if (j.type === "pointerup") {
-              if (dragDistance) {
-                console.log("drag stop");
-                dragDistance = false;
-              }
-              break;
-            }
-            if (j.type === "pointermove") {
-              const delta_x = j.x - i.x;
-              const delta_y = j.y - i.y;
-              const new_x = Math.min(
-                parentBox.width - childBox.width,
-                Math.max(0, childBox.left - parentBox.left + delta_x),
-              );
-              const new_y = Math.min(
-                parentBox.height - childBox.height,
-                Math.max(0, childBox.top - parentBox.top + delta_y),
-              );
-              element.style.left = `${new_x}px`;
-              element.style.top = `${new_y}px`;
-              dragDistance = true;
-            }
-            yield j;
-          }
-        }
-      }
-      yield i;
-    }
-  };
-  return Object.assign(Object.create(null), {
-    start() {
-      document.addEventListener(
-        "pointermove",
-        (...args) => asyncGenThingy.send(...args),
-        false,
-      );
-      document.addEventListener(
-        "pointerdown",
-        (...args) => asyncGenThingy.send(...args),
-        false,
-      );
-      document.addEventListener(
-        "pointerup",
-        (...args) => asyncGenThingy.send(...args),
-        false,
-      );
-      const source = asyncGenThingy.share(asyncGenThingy.produce());
-      asyncGenThingy.consume(main(source));
-    },
-  });
-};
