@@ -77,3 +77,41 @@ import "zone.js/dist/zone"; // Included with Angular CLI.
 import "core-js/es7/symbol";
 import "core-js/es7/array";
 import "whatwg-fetch";
+(function(ElementProto) {
+  // https://github.com/jonathantneal/closest/blob/master/element-closest.js
+  if (typeof ElementProto.matches !== "function") {
+    ElementProto.matches =
+      ElementProto.msMatchesSelector ||
+      ElementProto.mozMatchesSelector ||
+      ElementProto.webkitMatchesSelector ||
+      function matches(selector) {
+        const element = this;
+        const elements = (
+          element.document || element.ownerDocument
+        ).querySelectorAll(selector);
+        let index = 0;
+
+        while (elements[index] && elements[index] !== element) {
+          ++index;
+        }
+
+        return Boolean(elements[index]);
+      };
+  }
+
+  if (typeof ElementProto.closest !== "function") {
+    ElementProto.closest = function closest(selector) {
+      let element = this;
+
+      while (element && element.nodeType === 1) {
+        if (element.matches(selector)) {
+          return element;
+        }
+
+        element = element.parentNode;
+      }
+
+      return null;
+    };
+  }
+})(window["Element"].prototype);
