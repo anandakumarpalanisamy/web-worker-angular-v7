@@ -16,16 +16,6 @@ export class AppComponent implements OnInit {
   view: View;
   viewLite: View;
 
-  // TS does not parse async generators as class method correctly
-  foo = async function*() {
-    let i = 0;
-    do {
-      await new Promise((resolve, reject) => setTimeout(resolve, 1000));
-      yield i;
-      i += 1;
-    } while (i < 3);
-  };
-
   constructor(private workerService: WorkerService) {}
 
   async ngOnInit() {
@@ -92,4 +82,14 @@ export class AppComponent implements OnInit {
     }
     this.workerService.terminate(reference);
   }
+
+  // TS does not parse async generators as class method correctly
+  private readonly foo = async function*() {
+    let i = 0;
+    do {
+      await new Promise((resolve, reject) => setTimeout(resolve, 1000));
+      yield i;
+      i += 1;
+    } while (i < 3);
+  };
 }
