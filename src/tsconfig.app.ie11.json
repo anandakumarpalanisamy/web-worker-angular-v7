@@ -1,7 +1,6 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../tsconfig.ie11.json",
   "compilerOptions": {
-    "target": "es5",
     "outDir": "../out-tsc/app-ie11",
     "types": []
   },

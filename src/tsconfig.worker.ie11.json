@@ -1,8 +1,7 @@
 {
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/worker",
-    "target": "es5",
+    "outDir": "../out-tsc/worker-ie11",
     "lib": ["es2018", "esnext.asynciterable", "webworker"]
   },
   "exclude": ["test.ts", "**/*.spec.ts"],

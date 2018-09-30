@@ -1,7 +1,6 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../tsconfig.ie11.json",
   "compilerOptions": {
-    "target": "es5",
     "outDir": "../out-tsc/spec-ie11",
     "types": ["jasmine", "node"]
   },
