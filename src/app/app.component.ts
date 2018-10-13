@@ -3,6 +3,12 @@ import { View, Spec } from "vega";
 import { WorkerService } from "./services/worker/worker.service";
 import { DraggableArea } from "../draggable-area";
 
+import { IIteratorStateManagement } from "@local/IteratorStateManagement/IIteratorStateManagement";
+import {
+  IEventsIterator,
+  AsyncIterator,
+} from "@local/IteratorStateManagement/EventsIterator";
+
 declare var vega: any;
 declare var vegaEmbed: (containerId: string, spec: any) => void;
 
@@ -11,13 +17,37 @@ declare var vegaEmbed: (containerId: string, spec: any) => void;
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, IIteratorStateManagement {
+  readonly eventsProcessor: IEventsIterator = new AsyncIterator();
   title = "web-worker-v7";
 
   view: View;
   viewLite: View;
 
-  constructor(private workerService: WorkerService) {}
+  iteratorTestField = "foo";
+
+  constructor(private workerService: WorkerService) {
+    document.addEventListener(
+      "pointerdown",
+      this.eventsProcessor.send.bind(this.eventsProcessor),
+      false,
+    );
+    const self = this; // no arrow functions for async generators
+    this.eventsProcessor.start([
+      // this.dummyTransducer,
+      async function*(source) {
+        for await (const item of source) {
+          self.updateState(item);
+          yield;
+        }
+      },
+    ]);
+  }
+
+  updateState(item) {
+    console.log("item", item);
+    this.iteratorTestField = this.iteratorTestField === "foo" ? "bar" : "foo";
+  }
 
   async ngOnInit() {
     this.draggableTest();

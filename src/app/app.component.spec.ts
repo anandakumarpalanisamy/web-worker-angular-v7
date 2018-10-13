@@ -24,4 +24,35 @@ describe("AppComponent", () => {
       "Welcome to web-worker-v7!",
     );
   }));
+  //
+  it("should create the app.eventsProcessor", async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.eventsProcessor).toBeTruthy();
+  }));
+  it("should update its state via the app.eventsProcessor", async(async () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.iteratorTestField).toEqual("foo");
+    let p = new Promise(resolve => {
+      app.eventsProcessor.tap = resolve;
+    });
+    app.eventsProcessor.send(42);
+    await p;
+    expect(app.iteratorTestField).toEqual("bar");
+    //
+    p = new Promise(resolve => {
+      app.eventsProcessor.tap = resolve;
+    });
+    app.eventsProcessor.send(42);
+    await p;
+    expect(app.iteratorTestField).toEqual("foo");
+    //
+    p = new Promise(resolve => {
+      app.eventsProcessor.tap = resolve;
+    });
+    app.eventsProcessor.send(42);
+    await p;
+    expect(app.iteratorTestField).toEqual("bar");
+  }));
 });
