@@ -1,13 +1,13 @@
 // https://medium.com/dailyjs/decoupling-business-logic-using-async-generators-cc257f80ab33
 
 export interface IEventsIterator {
+  tap: Function;
   // TypeScript does not allow method for AsyncIterableIterator (yet?)
   start: (
     transducers: Array<(trandsducer: AsyncIterableIterator<Object>) => void>,
   ) => void;
   send(item: Object): void;
   main(input: AsyncIterable<Object>): AsyncIterable<Object>;
-  tap: Function;
 }
 
 export class AsyncIterator implements IEventsIterator {
@@ -16,10 +16,12 @@ export class AsyncIterator implements IEventsIterator {
   public main: (input: AsyncIterable<Object>) => AsyncIterable<Object>;
   public tap = null;
 
-  private readonly outlet = async function*(source) {
+  public readonly outlet = async function*(source) {
     for await (const item of source) {
-      yield;
+      console.log("will yield");
+      yield item;
       if (typeof this.tap === "function") {
+        console.log("tap is a function");
         await this.tap(item);
       }
     }

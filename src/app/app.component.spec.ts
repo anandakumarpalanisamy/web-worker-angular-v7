@@ -34,25 +34,30 @@ describe("AppComponent", () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.iteratorTestField).toEqual("foo");
-    let p = new Promise(resolve => {
-      app.eventsProcessor.tap = resolve;
-    });
     app.eventsProcessor.send(42);
-    await p;
-    expect(app.iteratorTestField).toEqual("bar");
-    //
-    p = new Promise(resolve => {
-      app.eventsProcessor.tap = resolve;
-    });
-    app.eventsProcessor.send(42);
-    await p;
-    expect(app.iteratorTestField).toEqual("foo");
-    //
-    p = new Promise(resolve => {
-      app.eventsProcessor.tap = resolve;
-    });
-    app.eventsProcessor.send(42);
-    await p;
-    expect(app.iteratorTestField).toEqual("bar");
+    console.log("why", 5512663);
+    for await (const item of app.iteratorTestField.outlet) {
+      console.log("sladi", item);
+    }
+    // let p = new Promise(resolve => {
+    //   app.eventsProcessor.tap = resolve;
+    // });
+    // app.eventsProcessor.send(42);
+    // await p;
+    // expect(app.iteratorTestField).toEqual("bar");
+    // //
+    // p = new Promise(resolve => {
+    //   app.eventsProcessor.tap = resolve;
+    // });
+    // app.eventsProcessor.send(42);
+    // await p;
+    // expect(app.iteratorTestField).toEqual("foo");
+    // //
+    // p = new Promise(resolve => {
+    //   app.eventsProcessor.tap = resolve;
+    // });
+    // app.eventsProcessor.send(42);
+    // await p;
+    // expect(app.iteratorTestField).toEqual("bar");
   }));
 });
